@@ -1,0 +1,22 @@
+import { Link, useParams } from "react-router-dom"
+import { ArrowLeft, ArrowRight, CalendarDays, CheckCircle2, Clock3, Share2 } from "lucide-react"
+import { posts } from "../data/siteData"
+
+export default function BlogDetails() {
+  const { slug } = useParams()
+  const post = posts.find((p) => p.slug === slug)
+  if (!post) return <section className="container-page py-24 text-center"><p className="text-7xl font-black text-orange-500">404</p><h1 className="mt-4 text-4xl font-black">Article Not Found</h1><Link to="/blog" className="mt-7 inline-flex items-center gap-2 rounded-xl bg-slate-950 px-6 py-3.5 font-black text-white"><ArrowLeft size={17}/> Back to Blog</Link></section>
+
+  const share = async () => {
+    const data = { title: post.title, text: post.excerpt, url: window.location.href }
+    if (navigator.share) { try { await navigator.share(data) } catch {} }
+    else { try { await navigator.clipboard.writeText(window.location.href); alert("Article link copied!") } catch { alert("Copy the page URL from your browser.") } }
+  }
+
+  return (
+    <div className="bg-slate-50">
+      <section className="relative overflow-hidden bg-slate-950 text-white"><img src={post.image} alt="" className="absolute inset-0 h-full w-full object-cover opacity-20"/><div className="absolute inset-0 bg-slate-950/80"/><div className="container-page relative py-20 sm:py-24"><Link to="/blog" className="inline-flex items-center gap-2 text-sm font-bold text-slate-300 hover:text-white"><ArrowLeft size={17}/> Back to Blog</Link><div className="mt-9 max-w-4xl"><span className="rounded-full bg-orange-500/10 px-4 py-2 text-xs font-black uppercase tracking-wider text-orange-300">{post.category}</span><h1 className="mt-6 text-4xl font-black leading-tight sm:text-5xl lg:text-6xl">{post.title}</h1><p className="mt-5 max-w-3xl text-lg leading-8 text-slate-300">{post.excerpt}</p><div className="mt-6 flex flex-wrap gap-5 text-sm text-slate-400"><span className="flex items-center gap-2"><CalendarDays size={16}/>{post.date}</span><span className="flex items-center gap-2"><Clock3 size={16}/>{post.readTime}</span></div></div></div></section>
+      <section className="container-page py-14"><div className="grid gap-8 lg:grid-cols-[1fr_320px]"><article className="rounded-3xl bg-white p-7 shadow-sm ring-1 ring-slate-200 sm:p-10"><img src={post.image} alt={post.title} className="mb-10 h-64 w-full rounded-2xl object-cover sm:h-96"/><p className="text-lg leading-8 text-slate-600">{post.excerpt}</p><button onClick={share} type="button" className="mt-6 inline-flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-3 text-sm font-black hover:border-orange-300 hover:text-orange-600"><Share2 size={17}/> Share Article</button><div className="mt-10">{post.sections.map(([heading, paragraphs], i)=><section key={heading} className="mb-10 last:mb-0"><div className="flex gap-4"><span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-orange-100 text-sm font-black text-orange-600">{i+1}</span><div><h2 className="text-2xl font-black">{heading}</h2>{paragraphs.map(p=><p key={p} className="mt-4 leading-8 text-slate-600">{p}</p>)}</div></div></section>)}</div><div className="mt-10 rounded-2xl bg-slate-50 p-6"><h2 className="text-xl font-black">Moving Day Checklist</h2><div className="mt-5 grid gap-3 sm:grid-cols-2">{["Label boxes","Protect fragile items","Clear moving routes","Confirm access","Prepare furniture","Keep essentials separate"].map(x=><div key={x} className="flex items-center gap-2 text-sm font-semibold"><CheckCircle2 size={17} className="text-orange-500"/>{x}</div>)}</div></div></article><aside><div className="sticky top-24 rounded-3xl bg-slate-950 p-7 text-white"><p className="text-xs font-black uppercase tracking-wider text-orange-400">Need Help?</p><h2 className="mt-3 text-2xl font-black">Let the crew handle the heavy work.</h2><p className="mt-3 text-sm leading-7 text-slate-400">Request loading, unloading, furniture moving, packing or heavy lifting help.</p><Link to="/contact" className="mt-6 flex items-center justify-center gap-2 rounded-xl bg-orange-500 px-5 py-3.5 font-black hover:bg-orange-400">Request Help <ArrowRight size={17}/></Link></div></aside></div></section>
+    </div>
+  )
+}

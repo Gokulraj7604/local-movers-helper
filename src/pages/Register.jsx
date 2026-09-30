@@ -1,0 +1,8 @@
+import { Link } from "react-router-dom"
+import { ArrowRight, Lock, Mail, Phone, User } from "lucide-react"
+
+const fields = [["Full name","text",User],["Phone","tel",Phone],["Email","email",Mail],["Password","password",Lock]]
+
+export default function Register() {
+  return <section className="min-h-[70vh] bg-slate-50 py-14"><div className="container-page max-w-2xl rounded-3xl bg-white p-7 shadow-xl sm:p-12"><p className="text-xs font-black uppercase tracking-[.2em] text-orange-500">Customer Account</p><h1 className="mt-3 text-4xl font-black">Create your account</h1><p className="mt-2 text-slate-500">Frontend registration screen ready for backend integration.</p><form onSubmit={e=>e.preventDefault()} className="mt-8 grid gap-5 sm:grid-cols-2">{fields.map(([label,type,Icon])=><label key={label} className="grid gap-2 text-sm font-bold">{label}<span className="relative"><Icon className="absolute left-4 top-3.5 text-slate-400" size={18}/><input required type={type} placeholder={label} className="w-full rounded-xl border border-slate-200 bg-slate-50 py-3.5 pl-11 pr-4 outline-none focus:border-orange-500"/></span></label>)}<button className="sm:col-span-2 inline-flex items-center justify-center gap-2 rounded-xl bg-orange-500 py-4 font-black text-white hover:bg-orange-600">Create Account <ArrowRight size={17}/></button></form><p className="mt-6 text-center text-sm text-slate-500">Already registered? <Link to="/login" className="font-bold text-orange-500">Sign in</Link></p></div></section>
+}
